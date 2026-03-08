@@ -1,59 +1,60 @@
-body{
-font-family: 'Segoe UI', sans-serif;
-background:#f4f6f8;
-margin:0;
-text-align:center;
-}
-
-header{
-background:#ff4d4d;
-color:white;
-padding:25px;
-font-size:22px;
-}
-
-.container{
-background:white;
-width:420px;
-margin:40px auto;
-padding:30px;
-border-radius:12px;
-box-shadow:0 10px 25px rgba(0,0,0,0.1);
-}
-
-input{
-width:100%;
-padding:12px;
-margin:10px 0;
-border-radius:6px;
-border:1px solid #ddd;
-font-size:14px;
-}
-
-button{
-background:#ff4d4d;
-color:white;
-padding:12px 25px;
-border:none;
-border-radius:6px;
-cursor:pointer;
-font-size:14px;
-}
-
-button:hover{
-background:#e63c3c;
-}
-
-.entries{
+.ikigai-diagram{
+position:relative;
+width:320px;
+height:320px;
 margin-top:40px;
 }
 
-.card{
+.circle{
+position:absolute;
+width:160px;
+height:160px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+text-align:center;
+font-weight:bold;
+color:white;
+}
+
+.love{
+background:#ff6b6b;
+top:0;
+left:60px;
+}
+
+.skill{
+background:#4dabf7;
+top:80px;
+left:0;
+}
+
+.need{
+background:#51cf66;
+top:80px;
+right:0;
+}
+
+.pay{
+background:#fcc419;
+bottom:0;
+left:60px;
+color:black;
+}
+
+.center{
+position:absolute;
+top:120px;
+left:120px;
+width:80px;
+height:80px;
 background:white;
-width:420px;
-margin:20px auto;
-padding:20px;
-border-radius:10px;
-box-shadow:0 6px 15px rgba(0,0,0,0.08);
-text-align:left;
+color:black;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:bold;
+box-shadow:0 4px 10px rgba(0,0,0,0.2);
 }
