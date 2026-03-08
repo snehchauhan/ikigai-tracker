@@ -1,48 +1,30 @@
-let data = JSON.parse(localStorage.getItem("ikigai")) || []
-
 function addEntry(){
 
-let love = document.getElementById("love").value
-let good = document.getElementById("good").value
-let world = document.getElementById("world").value
-let paid = document.getElementById("paid").value
+const love = document.getElementById("love").value;
+const skill = document.getElementById("skill").value;
+const need = document.getElementById("need").value;
+const pay = document.getElementById("pay").value;
 
-let entry = {love,good,world,paid}
-
-data.push(entry)
-
-localStorage.setItem("ikigai",JSON.stringify(data))
-
-display()
-
+if(!love || !skill || !need || !pay){
+alert("Please fill all fields");
+return;
 }
 
-function display(){
+const entry = document.createElement("div");
+entry.className="card";
 
-let list = document.getElementById("list")
+entry.innerHTML = `
+<p><b>❤️ Love:</b> ${love}</p>
+<p><b>🧠 Skill:</b> ${skill}</p>
+<p><b>🌍 Need:</b> ${need}</p>
+<p><b>💰 Paid:</b> ${pay}</p>
+<button onclick="this.parentElement.remove()">Delete</button>
+`;
 
-list.innerHTML=""
+document.getElementById("entries").appendChild(entry);
 
-data.forEach(e=>{
-
-list.innerHTML+=`
-
-<div class="card">
-
-<p><b>Love:</b> ${e.love}</p>
-
-<p><b>Good At:</b> ${e.good}</p>
-
-<p><b>World Needs:</b> ${e.world}</p>
-
-<p><b>Paid For:</b> ${e.paid}</p>
-
-</div>
-
-`
-
-})
-
+document.getElementById("love").value="";
+document.getElementById("skill").value="";
+document.getElementById("need").value="";
+document.getElementById("pay").value="";
 }
-
-display()
