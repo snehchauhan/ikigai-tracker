@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -41,7 +42,6 @@ padding:12px;
 margin:8px 0;
 border-radius:6px;
 border:1px solid #ccc;
-font-size:14px;
 }
 
 button{
@@ -51,7 +51,6 @@ border:none;
 border-radius:6px;
 background:#667eea;
 color:white;
-font-size:15px;
 cursor:pointer;
 margin-top:10px;
 }
@@ -90,7 +89,71 @@ margin-top:10px;
 background:#e63939;
 }
 
+/* IKIGAI DIAGRAM */
+
+.ikigai-diagram{
+position:relative;
+width:320px;
+height:320px;
+margin:40px 0;
+}
+
+.circle{
+position:absolute;
+width:160px;
+height:160px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+text-align:center;
+font-weight:bold;
+color:white;
+}
+
+.love{
+background:#ff6b6b;
+top:0;
+left:80px;
+}
+
+.skill{
+background:#4dabf7;
+top:80px;
+left:0;
+}
+
+.need{
+background:#51cf66;
+top:80px;
+right:0;
+}
+
+.pay{
+background:#fcc419;
+bottom:0;
+left:80px;
+color:black;
+}
+
+.center{
+position:absolute;
+top:120px;
+left:120px;
+width:80px;
+height:80px;
+background:white;
+color:black;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:bold;
+box-shadow:0 4px 10px rgba(0,0,0,0.2);
+}
+
 </style>
+
 </head>
 
 <body>
@@ -105,6 +168,17 @@ background:#e63939;
 <input id="pay" placeholder="What you can be paid for?">
 
 <button onclick="addEntry()">Calculate Ikigai</button>
+
+</div>
+
+<div class="ikigai-diagram">
+
+<div class="circle love">❤️<br>Love</div>
+<div class="circle skill">🧠<br>Skill</div>
+<div class="circle need">🌍<br>Need</div>
+<div class="circle pay">💰<br>Paid</div>
+
+<div class="center">IKIGAI</div>
 
 </div>
 
@@ -143,16 +217,13 @@ let percent=calculatePercent(e);
 let card=document.createElement("div");
 card.className="card";
 
-card.innerHTML=`
-<p><b>❤️ Love:</b> ${e.love}</p>
-<p><b>🧠 Skill:</b> ${e.skill}</p>
-<p><b>🌍 Need:</b> ${e.need}</p>
-<p><b>💰 Paid:</b> ${e.pay}</p>
-
-<div class="percent">Ikigai Score: ${percent}%</div>
-
-<button class="delete" onclick="removeEntry(${i})">Delete</button>
-`;
+card.innerHTML=
+"<p><b>Love:</b> "+e.love+"</p>"+
+"<p><b>Skill:</b> "+e.skill+"</p>"+
+"<p><b>Need:</b> "+e.need+"</p>"+
+"<p><b>Paid:</b> "+e.pay+"</p>"+
+"<div class='percent'>Ikigai Score: "+percent+"%</div>"+
+"<button class='delete' onclick='removeEntry("+i+")'>Delete</button>";
 
 box.appendChild(card);
 
@@ -175,7 +246,6 @@ return;
 entries.push({love,skill,need,pay});
 
 save();
-
 show();
 
 document.getElementById("love").value="";
@@ -190,7 +260,6 @@ function removeEntry(i){
 entries.splice(i,1);
 
 save();
-
 show();
 
 }
