@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Ikigai Finder</title>
+<title>Ikigai Finder Pro</title>
 
 <style>
 
@@ -24,7 +24,12 @@ color:white;
 }
 
 h1{
-margin-bottom:20px;
+margin-bottom:10px;
+}
+
+.subtitle{
+margin-bottom:30px;
+opacity:0.9;
 }
 
 .container{
@@ -32,8 +37,8 @@ background:white;
 color:black;
 padding:25px;
 border-radius:12px;
-width:400px;
-box-shadow:0 10px 25px rgba(0,0,0,0.2);
+width:420px;
+box-shadow:0 10px 25px rgba(0,0,0,0.25);
 }
 
 input{
@@ -52,41 +57,12 @@ border-radius:6px;
 background:#667eea;
 color:white;
 cursor:pointer;
+font-size:15px;
 margin-top:10px;
 }
 
 button:hover{
 background:#5563d6;
-}
-
-.entries{
-margin-top:30px;
-width:420px;
-}
-
-.card{
-background:white;
-color:black;
-padding:18px;
-border-radius:10px;
-margin-bottom:15px;
-box-shadow:0 6px 15px rgba(0,0,0,0.2);
-}
-
-.percent{
-font-size:20px;
-font-weight:bold;
-margin-top:10px;
-color:#667eea;
-}
-
-.delete{
-background:#ff4d4d;
-margin-top:10px;
-}
-
-.delete:hover{
-background:#e63939;
 }
 
 /* IKIGAI DIAGRAM */
@@ -109,6 +85,13 @@ justify-content:center;
 text-align:center;
 font-weight:bold;
 color:white;
+opacity:0.4;
+transition:0.4s;
+}
+
+.circle.active{
+opacity:1;
+transform:scale(1.05);
 }
 
 .love{
@@ -152,13 +135,55 @@ font-weight:bold;
 box-shadow:0 4px 10px rgba(0,0,0,0.2);
 }
 
+/* RESULTS */
+
+.entries{
+width:420px;
+margin-top:20px;
+}
+
+.card{
+background:white;
+color:black;
+padding:18px;
+border-radius:10px;
+margin-bottom:15px;
+box-shadow:0 6px 15px rgba(0,0,0,0.2);
+}
+
+.progress{
+background:#eee;
+border-radius:20px;
+overflow:hidden;
+margin-top:10px;
+}
+
+.progress-bar{
+height:10px;
+background:#667eea;
+width:0%;
+transition:1s;
+}
+
+.ai{
+margin-top:10px;
+font-weight:bold;
+color:#667eea;
+}
+
+.delete{
+background:#ff4d4d;
+margin-top:10px;
+}
+
 </style>
 
 </head>
 
 <body>
 
-<h1>🌸 Ikigai Finder</h1>
+<h1>🌸 Ikigai Finder Pro</h1>
+<div class="subtitle">Discover your purpose</div>
 
 <div class="container">
 
@@ -167,16 +192,16 @@ box-shadow:0 4px 10px rgba(0,0,0,0.2);
 <input id="need" placeholder="What the world needs?">
 <input id="pay" placeholder="What you can be paid for?">
 
-<button onclick="addEntry()">Calculate Ikigai</button>
+<button onclick="addEntry()">Find My Ikigai</button>
 
 </div>
 
 <div class="ikigai-diagram">
 
-<div class="circle love">❤️<br>Love</div>
-<div class="circle skill">🧠<br>Skill</div>
-<div class="circle need">🌍<br>Need</div>
-<div class="circle pay">💰<br>Paid</div>
+<div id="c1" class="circle love">Love</div>
+<div id="c2" class="circle skill">Skill</div>
+<div id="c3" class="circle need">Need</div>
+<div id="c4" class="circle pay">Paid</div>
 
 <div class="center">IKIGAI</div>
 
@@ -192,14 +217,37 @@ function save(){
 localStorage.setItem("ikigai",JSON.stringify(entries));
 }
 
+function aiSuggestion(entry){
+
+const text=(entry.love+" "+entry.skill+" "+entry.need+" "+entry.pay).toLowerCase();
+
+if(text.includes("write") || text.includes("content"))
+return "Suggested Career: Content Creator";
+
+if(text.includes("design"))
+return "Suggested Career: UI/UX Designer";
+
+if(text.includes("code") || text.includes("program"))
+return "Suggested Career: Software Developer";
+
+if(text.includes("teach"))
+return "Suggested Career: Teacher / Coach";
+
+if(text.includes("video"))
+return "Suggested Career: YouTuber / Video Creator";
+
+return "Suggested Career: Entrepreneur";
+
+}
+
 function calculatePercent(entry){
 
 let score=0;
 
-if(entry.love) score+=25;
-if(entry.skill) score+=25;
-if(entry.need) score+=25;
-if(entry.pay) score+=25;
+if(entry.love){score+=25;document.getElementById("c1").classList.add("active");}
+if(entry.skill){score+=25;document.getElementById("c2").classList.add("active");}
+if(entry.need){score+=25;document.getElementById("c3").classList.add("active");}
+if(entry.pay){score+=25;document.getElementById("c4").classList.add("active");}
 
 return score;
 
@@ -222,7 +270,11 @@ card.innerHTML=
 "<p><b>Skill:</b> "+e.skill+"</p>"+
 "<p><b>Need:</b> "+e.need+"</p>"+
 "<p><b>Paid:</b> "+e.pay+"</p>"+
-"<div class='percent'>Ikigai Score: "+percent+"%</div>"+
+
+"<div class='progress'><div class='progress-bar' style='width:"+percent+"%'></div></div>"+
+
+"<div class='ai'>"+aiSuggestion(e)+"</div>"+
+
 "<button class='delete' onclick='removeEntry("+i+")'>Delete</button>";
 
 box.appendChild(card);
