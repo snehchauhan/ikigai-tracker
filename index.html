@@ -6,68 +6,91 @@
 
 <style>
 
+*{
+box-sizing:border-box;
+font-family:Arial, Helvetica, sans-serif;
+}
+
 body{
-font-family: Arial;
-background:#f4f6f8;
+margin:0;
+background:linear-gradient(135deg,#667eea,#764ba2);
+min-height:100vh;
+display:flex;
+flex-direction:column;
+align-items:center;
 padding:40px;
-text-align:center;
+color:white;
 }
 
 h1{
-color:#333;
+margin-bottom:20px;
 }
 
 .container{
 background:white;
-padding:20px;
-max-width:500px;
-margin:auto;
-border-radius:10px;
-box-shadow:0 0 10px rgba(0,0,0,0.1);
+color:black;
+padding:25px;
+border-radius:12px;
+width:400px;
+box-shadow:0 10px 25px rgba(0,0,0,0.2);
 }
 
 input{
-width:90%;
-padding:10px;
-margin:10px;
-border-radius:5px;
+width:100%;
+padding:12px;
+margin:8px 0;
+border-radius:6px;
 border:1px solid #ccc;
+font-size:14px;
 }
 
 button{
-padding:10px 20px;
+width:100%;
+padding:12px;
 border:none;
-background:#007bff;
+border-radius:6px;
+background:#667eea;
 color:white;
-border-radius:5px;
+font-size:15px;
 cursor:pointer;
+margin-top:10px;
 }
 
 button:hover{
-background:#0056b3;
+background:#5563d6;
 }
 
 .entries{
 margin-top:30px;
+width:420px;
 }
 
 .card{
 background:white;
-padding:15px;
-margin:15px auto;
-max-width:400px;
+color:black;
+padding:18px;
 border-radius:10px;
-box-shadow:0 0 10px rgba(0,0,0,0.1);
-text-align:left;
+margin-bottom:15px;
+box-shadow:0 6px 15px rgba(0,0,0,0.2);
 }
 
-.card button{
-background:red;
+.percent{
+font-size:20px;
+font-weight:bold;
+margin-top:10px;
+color:#667eea;
+}
+
+.delete{
+background:#ff4d4d;
 margin-top:10px;
 }
 
-</style>
+.delete:hover{
+background:#e63939;
+}
 
+</style>
 </head>
 
 <body>
@@ -76,23 +99,105 @@ margin-top:10px;
 
 <div class="container">
 
-<input id="love" placeholder="What do you love? ❤️">
+<input id="love" placeholder="What do you love?">
+<input id="skill" placeholder="What are you good at?">
+<input id="need" placeholder="What the world needs?">
+<input id="pay" placeholder="What you can be paid for?">
 
-<input id="skill" placeholder="What are you good at? 🧠">
-
-<input id="need" placeholder="What does the world need? 🌍">
-
-<input id="pay" placeholder="What can you be paid for? 💰">
-
-<br><br>
-
-<button onclick="addEntry()">Add Entry</button>
+<button onclick="addEntry()">Calculate Ikigai</button>
 
 </div>
 
 <div id="entries" class="entries"></div>
 
-<script src="script.js"></script>
+<script>
+
+let entries = JSON.parse(localStorage.getItem("ikigai")) || [];
+
+function save(){
+localStorage.setItem("ikigai",JSON.stringify(entries));
+}
+
+function calculatePercent(entry){
+
+let score=0;
+
+if(entry.love) score+=25;
+if(entry.skill) score+=25;
+if(entry.need) score+=25;
+if(entry.pay) score+=25;
+
+return score;
+
+}
+
+function show(){
+
+const box=document.getElementById("entries");
+box.innerHTML="";
+
+entries.forEach((e,i)=>{
+
+let percent=calculatePercent(e);
+
+let card=document.createElement("div");
+card.className="card";
+
+card.innerHTML=`
+<p><b>❤️ Love:</b> ${e.love}</p>
+<p><b>🧠 Skill:</b> ${e.skill}</p>
+<p><b>🌍 Need:</b> ${e.need}</p>
+<p><b>💰 Paid:</b> ${e.pay}</p>
+
+<div class="percent">Ikigai Score: ${percent}%</div>
+
+<button class="delete" onclick="removeEntry(${i})">Delete</button>
+`;
+
+box.appendChild(card);
+
+});
+
+}
+
+function addEntry(){
+
+const love=document.getElementById("love").value;
+const skill=document.getElementById("skill").value;
+const need=document.getElementById("need").value;
+const pay=document.getElementById("pay").value;
+
+if(!love || !skill || !need || !pay){
+alert("Please fill all fields");
+return;
+}
+
+entries.push({love,skill,need,pay});
+
+save();
+
+show();
+
+document.getElementById("love").value="";
+document.getElementById("skill").value="";
+document.getElementById("need").value="";
+document.getElementById("pay").value="";
+
+}
+
+function removeEntry(i){
+
+entries.splice(i,1);
+
+save();
+
+show();
+
+}
+
+show();
+
+</script>
 
 </body>
 </html>
