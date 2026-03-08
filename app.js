@@ -1,3 +1,8 @@
+function loadEntries(){
+const saved = JSON.parse(localStorage.getItem("ikigaiEntries")) || [];
+saved.forEach(showEntry);
+}
+
 function addEntry(){
 
 const love = document.getElementById("love").value;
@@ -10,21 +15,51 @@ alert("Please fill all fields");
 return;
 }
 
-const entry = document.createElement("div");
-entry.className="card";
+const entryData = {love, skill, need, pay};
 
-entry.innerHTML = `
-<p><b>❤️ Love:</b> ${love}</p>
-<p><b>🧠 Skill:</b> ${skill}</p>
-<p><b>🌍 Need:</b> ${need}</p>
-<p><b>💰 Paid:</b> ${pay}</p>
-<button onclick="this.parentElement.remove()">Delete</button>
-`;
+let entries = JSON.parse(localStorage.getItem("ikigaiEntries")) || [];
+entries.push(entryData);
 
-document.getElementById("entries").appendChild(entry);
+localStorage.setItem("ikigaiEntries", JSON.stringify(entries));
+
+showEntry(entryData);
 
 document.getElementById("love").value="";
 document.getElementById("skill").value="";
 document.getElementById("need").value="";
 document.getElementById("pay").value="";
 }
+
+function showEntry(data){
+
+const entry = document.createElement("div");
+entry.className="card";
+
+entry.innerHTML = `
+<p><b>❤️ Love:</b> ${data.love}</p>
+<p><b>🧠 Skill:</b> ${data.skill}</p>
+<p><b>🌍 Need:</b> ${data.need}</p>
+<p><b>💰 Paid:</b> ${data.pay}</p>
+<button onclick="deleteEntry(this)">Delete</button>
+`;
+
+document.getElementById("entries").appendChild(entry);
+}
+
+function deleteEntry(button){
+
+const card = button.parentElement;
+const text = card.innerText;
+
+let entries = JSON.parse(localStorage.getItem("ikigaiEntries")) || [];
+
+entries = entries.filter(e =>
+!text.includes(e.love)
+);
+
+localStorage.setItem("ikigaiEntries", JSON.stringify(entries));
+
+card.remove();
+}
+
+window.onload = loadEntries;
