@@ -1,65 +1,53 @@
-function loadEntries(){
-const saved = JSON.parse(localStorage.getItem("ikigaiEntries")) || [];
-saved.forEach(showEntry);
+function loadEntries() {
+  const entries = JSON.parse(localStorage.getItem("ikigaiEntries")) || [];
+  entries.forEach(entry => displayEntry(entry));
 }
 
-function addEntry(){
+function addEntry() {
+  const love = document.getElementById("love").value;
+  const skill = document.getElementById("skill").value;
+  const need = document.getElementById("need").value;
+  const pay = document.getElementById("pay").value;
 
-const love = document.getElementById("love").value;
-const skill = document.getElementById("skill").value;
-const need = document.getElementById("need").value;
-const pay = document.getElementById("pay").value;
+  if (!love || !skill || !need || !pay) {
+    alert("Please fill all fields");
+    return;
+  }
 
-if(!love || !skill || !need || !pay){
-alert("Please fill all fields");
-return;
+  const entry = { love, skill, need, pay };
+
+  let entries = JSON.parse(localStorage.getItem("ikigaiEntries")) || [];
+  entries.push(entry);
+  localStorage.setItem("ikigaiEntries", JSON.stringify(entries));
+
+  displayEntry(entry);
+
+  document.getElementById("love").value = "";
+  document.getElementById("skill").value = "";
+  document.getElementById("need").value = "";
+  document.getElementById("pay").value = "";
 }
 
-const entryData = {love, skill, need, pay};
+function displayEntry(entry) {
+  const container = document.getElementById("entries");
 
-let entries = JSON.parse(localStorage.getItem("ikigaiEntries")) || [];
-entries.push(entryData);
+  const card = document.createElement("div");
+  card.className = "card";
 
-localStorage.setItem("ikigaiEntries", JSON.stringify(entries));
+  card.innerHTML = `
+    <p><b>❤️ Love:</b> ${entry.love}</p>
+    <p><b>🧠 Skill:</b> ${entry.skill}</p>
+    <p><b>🌍 Need:</b> ${entry.need}</p>
+    <p><b>💰 Paid:</b> ${entry.pay}</p>
+    <button onclick="deleteEntry(this)">Delete</button>
+  `;
 
-showEntry(entryData);
-
-document.getElementById("love").value="";
-document.getElementById("skill").value="";
-document.getElementById("need").value="";
-document.getElementById("pay").value="";
+  container.appendChild(card);
 }
 
-function showEntry(data){
-
-const entry = document.createElement("div");
-entry.className="card";
-
-entry.innerHTML = `
-<p><b>❤️ Love:</b> ${data.love}</p>
-<p><b>🧠 Skill:</b> ${data.skill}</p>
-<p><b>🌍 Need:</b> ${data.need}</p>
-<p><b>💰 Paid:</b> ${data.pay}</p>
-<button onclick="deleteEntry(this)">Delete</button>
-`;
-
-document.getElementById("entries").appendChild(entry);
-}
-
-function deleteEntry(button){
-
-const card = button.parentElement;
-const text = card.innerText;
-
-let entries = JSON.parse(localStorage.getItem("ikigaiEntries")) || [];
-
-entries = entries.filter(e =>
-!text.includes(e.love)
-);
-
-localStorage.setItem("ikigaiEntries", JSON.stringify(entries));
-
-card.remove();
+function deleteEntry(button) {
+  const card = button.parentElement;
+  card.remove();
 }
 
 window.onload = loadEntries;
