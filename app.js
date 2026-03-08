@@ -1,53 +1,84 @@
-function loadEntries() {
-  const entries = JSON.parse(localStorage.getItem("ikigaiEntries")) || [];
-  entries.forEach(entry => displayEntry(entry));
+let entries = JSON.parse(localStorage.getItem("ikigai")) || [];
+
+function save(){
+localStorage.setItem("ikigai", JSON.stringify(entries));
 }
 
-function addEntry() {
-  const love = document.getElementById("love").value;
-  const skill = document.getElementById("skill").value;
-  const need = document.getElementById("need").value;
-  const pay = document.getElementById("pay").value;
+function calculatePercent(entry){
 
-  if (!love || !skill || !need || !pay) {
-    alert("Please fill all fields");
-    return;
-  }
+let score = 0;
 
-  const entry = { love, skill, need, pay };
+if(entry.love) score += 25;
+if(entry.skill) score += 25;
+if(entry.need) score += 25;
+if(entry.pay) score += 25;
 
-  let entries = JSON.parse(localStorage.getItem("ikigaiEntries")) || [];
-  entries.push(entry);
-  localStorage.setItem("ikigaiEntries", JSON.stringify(entries));
+return score;
 
-  displayEntry(entry);
-
-  document.getElementById("love").value = "";
-  document.getElementById("skill").value = "";
-  document.getElementById("need").value = "";
-  document.getElementById("pay").value = "";
 }
 
-function displayEntry(entry) {
-  const container = document.getElementById("entries");
+function show(){
 
-  const card = document.createElement("div");
-  card.className = "card";
+const box = document.getElementById("entries");
+box.innerHTML = "";
 
-  card.innerHTML = `
-    <p><b>❤️ Love:</b> ${entry.love}</p>
-    <p><b>🧠 Skill:</b> ${entry.skill}</p>
-    <p><b>🌍 Need:</b> ${entry.need}</p>
-    <p><b>💰 Paid:</b> ${entry.pay}</p>
-    <button onclick="deleteEntry(this)">Delete</button>
-  `;
+entries.forEach((e,i)=>{
 
-  container.appendChild(card);
+let percent = calculatePercent(e);
+
+let card = document.createElement("div");
+card.className = "card";
+
+card.innerHTML = `
+<p><b>❤️ Love:</b> ${e.love}</p>
+<p><b>🧠 Skill:</b> ${e.skill}</p>
+<p><b>🌍 Need:</b> ${e.need}</p>
+<p><b>💰 Paid:</b> ${e.pay}</p>
+
+<div class="percent">Ikigai Score: ${percent}%</div>
+
+<button class="delete" onclick="removeEntry(${i})">Delete</button>
+`;
+
+box.appendChild(card);
+
+});
+
 }
 
-function deleteEntry(button) {
-  const card = button.parentElement;
-  card.remove();
+function addEntry(){
+
+const love = document.getElementById("love").value;
+const skill = document.getElementById("skill").value;
+const need = document.getElementById("need").value;
+const pay = document.getElementById("pay").value;
+
+if(!love || !skill || !need || !pay){
+alert("Please fill all fields");
+return;
 }
 
-window.onload = loadEntries;
+entries.push({love,skill,need,pay});
+
+save();
+
+show();
+
+document.getElementById("love").value="";
+document.getElementById("skill").value="";
+document.getElementById("need").value="";
+document.getElementById("pay").value="";
+
+}
+
+function removeEntry(i){
+
+entries.splice(i,1);
+
+save();
+
+show();
+
+}
+
+show();
