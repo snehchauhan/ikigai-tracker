@@ -1,41 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Ikigai Tracker</title>
-<link rel="stylesheet" href="style.css">
+<title>Ikigai Finder</title>
+
+<style>
+
+body{
+font-family: Arial;
+background:#f4f6f8;
+padding:40px;
+text-align:center;
+}
+
+h1{
+color:#333;
+}
+
+.container{
+background:white;
+padding:20px;
+max-width:500px;
+margin:auto;
+border-radius:10px;
+box-shadow:0 0 10px rgba(0,0,0,0.1);
+}
+
+input{
+width:90%;
+padding:10px;
+margin:10px;
+border-radius:5px;
+border:1px solid #ccc;
+}
+
+button{
+padding:10px 20px;
+border:none;
+background:#007bff;
+color:white;
+border-radius:5px;
+cursor:pointer;
+}
+
+button:hover{
+background:#0056b3;
+}
+
+.entries{
+margin-top:30px;
+}
+
+.card{
+background:white;
+padding:15px;
+margin:15px auto;
+max-width:400px;
+border-radius:10px;
+box-shadow:0 0 10px rgba(0,0,0,0.1);
+text-align:left;
+}
+
+.card button{
+background:red;
+margin-top:10px;
+}
+
+</style>
+
 </head>
 
 <body>
 
-<header>
-<h1>Ikigai Tracker</h1>
-<p>Discover your life purpose</p>
-</header>
+<h1>🌸 Ikigai Finder</h1>
 
 <div class="container">
 
-<h2>Add Ikigai Entry</h2>
+<input id="love" placeholder="What do you love? ❤️">
 
-<input id="love" placeholder="❤️ What you love">
+<input id="skill" placeholder="What are you good at? 🧠">
 
-<input id="good" placeholder="🧠 What you are good at">
+<input id="need" placeholder="What does the world need? 🌍">
 
-<input id="world" placeholder="🌍 What the world needs">
+<input id="pay" placeholder="What can you be paid for? 💰">
 
-<input id="paid" placeholder="💰 What you can be paid for">
+<br><br>
 
 <button onclick="addEntry()">Add Entry</button>
 
 </div>
 
-<div class="entries">
+<div id="entries" class="entries"></div>
 
-<h2>Your Ikigai Entries</h2>
-
-<div id="list"></div>
-
-</div>
-
-<script src="app.js"></script>
+<script src="script.js"></script>
 
 </body>
 </html>
